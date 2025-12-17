@@ -1,47 +1,24 @@
-# bio-protocol-ml-encryption
-ML-Based Encryption Framework for Bio-Protocol Security
-This project implements an intelligent, adaptive security framework that uses Machine Learning to dynamically assign encryption protocols to biological data based on risk assessment and anomaly detection.
+## ML-Based Encryption Framework for Bio-Protocol Security in CloudThis repository implements an adaptive security framework that uses Machine Learning to dynamically assign encryption protocols to biological data based on risk assessment and anomaly detection.
 
-**Project Overview:**
-The framework analyzes biometric data (such as Haematocrit, Hemoglobin, and Erythrocyte levels) to categorize records into different security tiers. By identifying "anomalous" or "high-risk" profiles, the system applies stronger cryptographic measures to sensitive data while maintaining system efficiency for standard records.
+## Project OverviewIn cloud-based healthcare systems, static encryption can be inefficient. This framework analyzes biological profiles (e.g., Haematocrit, Hemoglobin, Erythrocyte levels) to determine the sensitivity of each record. By identifying "anomalous" or "high-risk" profiles, the system applies stronger cryptographic measures to sensitive data while maintaining system performance for standard records.
 
-**Technical Workflow:**
-1. Data Preprocessing
-Feature Encoding: Categorical variables like SEX and SOURCE are transformed into numerical values (e.g., M/F to 1/0) for model compatibility.
+## Technical Workflow:
+1. Data Preprocessing & NormalizationFeature Encoding: Categorical variables like SEX and SOURCE are mapped to numerical values for model compatibility.Normalization: Numerical features are processed through StandardScaler to ensure that features with different units (like Age vs. Erythrocyte count) have equal weight.
+Missing Values: The pipeline automatically fills missing numerical data with mean values to maintain dataset integrity.
+2. Multi-Stage ML LogicUnsupervised Clustering: Uses KMeans to group similar biological profiles into three distinct risk tiers.
+3. Anomaly Detection: Employs Isolation Forest to flag statistical outliers that may represent critical health data or security risks.
+4. Supervised Refinement: The final implementation utilizes a Random Forest Classifier with SMOTE (Synthetic Minority Over-sampling Technique) to handle class imbalance and ensure high accuracy in predicting high-risk profiles.
+## Adaptive Encryption PolicySecurity protocols are automatically assigned based on the ML output:
+# Risk CategoryML ConditionEncryption ProtocolCritical / AnomalyIsolation Forest Anomaly (-1)RSA + OTP + Key RotationHigh RiskKMeans Cluster 2RSAMedium RiskKMeans Cluster 1AES-256Low RiskKMeans Cluster 0 / OthersAES-128
 
-Normalization: All numerical features are processed through StandardScaler to ensure that unit differences do not bias the clustering results.
+## Evaluation ResultsThe system's performance is verified through comprehensive metrics:
+ROC-AUC Curves: Evaluates the model's ability to distinguish between normal and high-risk profiles.
 
-Missing Values: The system automatically fills missing numerical data with mean values to maintain dataset integrity.
+## Confusion Matrices:
+Provides a breakdown of correct vs. incorrect risk classifications.Classification Reports: Includes Precision, Recall, and F1-scores for each security tier.
 
-2. Multi-Tiered Security Logic
-The framework uses a hybrid approach to classify data sensitivity:
+## Getting StartedInstallationEnsure you have Python installed, then run:
+Bashpip install pandas numpy scikit-learn imbalanced-learn matplotlib seaborn
+UsagePlace your dataset.csv in the project root.Execute the final optimized model:Bashpython sourcev3.py
 
-Unsupervised Clustering: Uses KMeans (3 clusters) to group similar biological profiles.
-
-Anomaly Detection: Employs Isolation Forest to flag statistical outliers that may represent critical health data or security risks.
-
-3. Adaptive Encryption PolicyBased on the ML output, the following encryption levels are assigned:Risk CategoryML ConditionEncryption ProtocolCritical/AnomalyIsolation Forest = -1RSA + OTP + Key RotationHigh RiskKMeans Cluster 2RSAMedium RiskKMeans Cluster 1AES-256Low RiskKMeans Cluster 0 / OthersAES-128
-
-
-4. Advanced Model Refinement
-Imbalance Handling: The project utilizes SMOTE (Synthetic Minority Over-sampling Technique) to balance the data, ensuring the model is highly sensitive to rare anomalies.
-
-Supervised Learning: The final iteration (sourcev3.py) implements a Random Forest Classifier with stratified train-test splits to achieve robust predictive performance.
-
-## Evaluation & Visualization:
-The system provides several metrics to verify the accuracy of the security assignments:
-
-ROC Curves & AUC: Measures the model's effectiveness in distinguishing between normal and high-risk profiles.
-
-Confusion Matrices: Provides a detailed breakdown of correct vs. incorrect risk classifications.
-
-PCA Visualization: Reduces the biological features to two dimensions to visually demonstrate how the clusters are separated.
-
-## Getting Started
-Installation:
-pip install pandas numpy scikit-learn imbalanced-learn matplotlib seaborn
-Execution
-Place your dataset.csv in the root directory.
-
-Run the final optimized model:
-python src/sourcev3.py
+## LicenseThis project is licensed under the MIT License - see the LICENSE file for details.
